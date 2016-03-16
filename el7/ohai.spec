@@ -36,14 +36,6 @@ Provides: rubygem(%{gem_name}) = %{version}
 Ohai profiles your system and emits JSON.
 
 
-%package doc
-Summary: Documentation for %{name}
-Group: Documentation
-Requires: %{name} = %{version}-%{release}
-BuildArch: noarch
-
-%description doc
-Documentation for %{name}.
 
 %prep
 gem unpack %{SOURCE0}
@@ -74,6 +66,9 @@ mkdir -p %{buildroot}%{_mandir}
 cp -a ./docs/man/* \
         %{buildroot}%{_mandir}/
 
+rm -f %{buildroot}%{gem_instdir}/Rakefile
+rm -rf %{buildroot}%{gem_instdir}/spec/
+
 find %{buildroot}%{gem_instdir}/bin -type f | xargs chmod a+x
 
 # Run the test suite
@@ -86,18 +81,15 @@ popd
 %dir %{gem_instdir}
 %{_bindir}/ohai
 %{gem_instdir}/bin
-%{gem_instdir}/Rakefile
 %{gem_instdir}/docs/man/man1/ohai.1
-%{gem_instdir}/LICENSE
-%{gem_instdir}/README.rdoc
-%{gem_instdir}/spec
 %{gem_libdir}
+%doc %{gem_docdir}
+%doc %{gem_instdir}/LICENSE
+%doc %{gem_instdir}/README.rdoc
 %{_mandir}/man1/ohai.1.gz
 %exclude %{gem_cache}
 %{gem_spec}
 
-%files doc
-%doc %{gem_docdir}
 
 %changelog
 * Wed Mar 16 2016 Pierre Riteau <priteau@uchicago.edu> - 6.24.2-1
